@@ -1,0 +1,1002 @@
+type,name,tbl_name,rootpage,sql
+view,ods_hubee,ods_hubee,0,"CREATE VIEW ods_hubee AS
+WITH hubee_geo AS (
+SELECT 
+ref_insee_region.reg AS REGION_CD
+,ref_insee_region.libelle AS REGION_LB
+,ref_insee_departement.DEP AS DEP_CD
+,ref_insee_departement.LIBELLE AS DEP_LB
+,communes.COM AS COM_CD
+,communes.LIBELLE AS COM_LB
+,""Modalité d'accès""
+,Statut
+,""Date d'activation""
+,""Date de suspension""
+FROM ""sa_hubee_20250115""
+LEFT JOIN (
+	SELECT 
+	CAST(COM AS VARCHAR) AS COM
+	, LIBELLE 
+	, MAX(SUBSTR(COM, 1, 2)) AS DEP
+	FROM ref_insee_communes
+	WHERE 1=1
+	GROUP BY COM
+	UNION 
+	SELECT
+	CAST(COM AS VARCHAR) AS COM
+	, LIBELLE 
+	, MAX(SUBSTR(COM, 1, 2)) AS DEP
+	FROM ref_insee_communes_histo
+	WHERE 1=1
+	AND COM NOT IN (
+		SELECT 
+		COM
+		FROM ref_insee_communes
+		WHERE 1=1
+		)
+	GROUP BY COM
+) communes ON ""sa_hubee_20250115"".""BranchCode de l'organisation"" = communes.COM
+LEFT JOIN ref_insee_departement ON communes.DEP = ref_insee_departement.DEP 
+LEFT JOIN ref_insee_region ON ref_insee_departement.REG = ref_insee_region.reg 
+WHERE 1=1
+AND ""Nom de l'organisation"" LIKE ""%COMMUNE%"" 
+AND ""Nom de l'organisation"" != ""COMMUNE DE HUBEE""
+)
+--
+--
+--
+SELECT
+hubee_geo.*
+, finess.EHPAD
+, finess.ESMS 
+, finess.ES
+FROM hubee_geo
+LEFT JOIN (
+	SELECT 
+	com_code
+	, MAX(EHPAD) AS EHPAD
+	, MAX(ESMS) AS ESMS
+	, MAX(ES) AS ES
+	FROM (
+		SELECT
+		t_finess.com_code
+		, CASE WHEN t_finess.categ_code = '500' THEN 1 END AS EHPAD
+		, CASE
+			WHEN t_finess.categ_code = '160' THEN 1
+			WHEN t_finess.categ_code = '162' THEN 1
+			WHEN t_finess.categ_code = '165' THEN 1
+			WHEN t_finess.categ_code = '166' THEN 1
+			WHEN t_finess.categ_code = '172' THEN 1
+			WHEN t_finess.categ_code = '175' THEN 1
+			WHEN t_finess.categ_code = '176' THEN 1
+			WHEN t_finess.categ_code = '177' THEN 1
+			WHEN t_finess.categ_code = '178' THEN 1
+			WHEN t_finess.categ_code = '180' THEN 1
+			WHEN t_finess.categ_code = '182' THEN 1
+			WHEN t_finess.categ_code = '183' THEN 1
+			WHEN t_finess.categ_code = '184' THEN 1
+			WHEN t_finess.categ_code = '185' THEN 1
+			WHEN t_finess.categ_code = '186' THEN 1
+			WHEN t_finess.categ_code = '188' THEN 1
+			WHEN t_finess.categ_code = '189' THEN 1
+			WHEN t_finess.categ_code = '190' THEN 1
+			WHEN t_finess.categ_code = '191' THEN 1
+			WHEN t_finess.categ_code = '192' THEN 1
+			WHEN t_finess.categ_code = '193' THEN 1
+			WHEN t_finess.categ_code = '194' THEN 1
+			WHEN t_finess.categ_code = '195' THEN 1
+			WHEN t_finess.categ_code = '196' THEN 1
+			WHEN t_finess.categ_code = '197' THEN 1
+			WHEN t_finess.categ_code = '198' THEN 1
+			WHEN t_finess.categ_code = '199' THEN 1
+			WHEN t_finess.categ_code = '2' THEN 1
+			WHEN t_finess.categ_code = '200' THEN 1
+			WHEN t_finess.categ_code = '202' THEN 1
+			WHEN t_finess.categ_code = '205' THEN 1
+			WHEN t_finess.categ_code = '207' THEN 1
+			WHEN t_finess.categ_code = '208' THEN 1
+			WHEN t_finess.categ_code = '209' THEN 1
+			WHEN t_finess.categ_code = '212' THEN 1
+			WHEN t_finess.categ_code = '213' THEN 1
+			WHEN t_finess.categ_code = '216' THEN 1
+			WHEN t_finess.categ_code = '221' THEN 1
+			WHEN t_finess.categ_code = '236' THEN 1
+			WHEN t_finess.categ_code = '237' THEN 1
+			WHEN t_finess.categ_code = '238' THEN 1
+			WHEN t_finess.categ_code = '241' THEN 1
+			WHEN t_finess.categ_code = '246' THEN 1
+			WHEN t_finess.categ_code = '247' THEN 1
+			WHEN t_finess.categ_code = '249' THEN 1
+			WHEN t_finess.categ_code = '250' THEN 1
+			WHEN t_finess.categ_code = '251' THEN 1
+			WHEN t_finess.categ_code = '252' THEN 1
+			WHEN t_finess.categ_code = '253' THEN 1
+			WHEN t_finess.categ_code = '255' THEN 1
+			WHEN t_finess.categ_code = '262' THEN 1
+			WHEN t_finess.categ_code = '265' THEN 1
+			WHEN t_finess.categ_code = '286' THEN 1
+			WHEN t_finess.categ_code = '295' THEN 1
+			WHEN t_finess.categ_code = '343' THEN 1
+			WHEN t_finess.categ_code = '344' THEN 1
+			WHEN t_finess.categ_code = '354' THEN 1
+			WHEN t_finess.categ_code = '368' THEN 1
+			WHEN t_finess.categ_code = '370' THEN 1
+			WHEN t_finess.categ_code = '375' THEN 1
+			WHEN t_finess.categ_code = '376' THEN 1
+			WHEN t_finess.categ_code = '377' THEN 1
+			WHEN t_finess.categ_code = '378' THEN 1
+			WHEN t_finess.categ_code = '379' THEN 1
+			WHEN t_finess.categ_code = '381' THEN 1
+			WHEN t_finess.categ_code = '382' THEN 1
+			WHEN t_finess.categ_code = '386' THEN 1
+			WHEN t_finess.categ_code = '390' THEN 1
+			WHEN t_finess.categ_code = '393' THEN 1
+			WHEN t_finess.categ_code = '394' THEN 1
+			WHEN t_finess.categ_code = '395' THEN 1
+			WHEN t_finess.categ_code = '396' THEN 1
+			WHEN t_finess.categ_code = '397' THEN 1
+			WHEN t_finess.categ_code = '402' THEN 1
+			WHEN t_finess.categ_code = '411' THEN 1
+			WHEN t_finess.categ_code = '418' THEN 1
+			WHEN t_finess.categ_code = '427' THEN 1
+			WHEN t_finess.categ_code = '434' THEN 1
+			WHEN t_finess.categ_code = '437' THEN 1
+			WHEN t_finess.categ_code = '440' THEN 1
+			WHEN t_finess.categ_code = '441' THEN 1
+			WHEN t_finess.categ_code = '445' THEN 1
+			WHEN t_finess.categ_code = '446' THEN 1
+			WHEN t_finess.categ_code = '448' THEN 1
+			WHEN t_finess.categ_code = '449' THEN 1
+			WHEN t_finess.categ_code = '450' THEN 1
+			WHEN t_finess.categ_code = '453' THEN 1
+			WHEN t_finess.categ_code = '460' THEN 1
+			WHEN t_finess.categ_code = '461' THEN 1
+			WHEN t_finess.categ_code = '462' THEN 1
+			WHEN t_finess.categ_code = '463' THEN 1
+			WHEN t_finess.categ_code = '464' THEN 1
+			--WHEN t_finess.categ_code = '500' THEN 1
+			WHEN t_finess.categ_code = '501' THEN 1
+			WHEN t_finess.categ_code = '502' THEN 1
+		END AS ESMS
+		, CASE WHEN t_finess.finess IS NOT NULL THEN 1 END AS ES
+		FROM ""CertDCTFiness"" t_finess
+		WHERE t_finess.etat = ""ACTUEL"" ) t_finess_es
+	GROUP BY com_code) finess ON hubee_geo.COM_CD = finess.com_code"
+view,ods_insee,ods_insee,0,"CREATE VIEW ods_insee AS
+WITH sa_insee_total AS (
+SELECT 
+*
+, 1 AS Total
+FROM sa_insee_n_2_n_3
+WHERE ADEC = 2022 OR ADEC = 2023
+UNION
+SELECT 
+adec AS ADEC
+, mdec AS MDEC
+, jdec AS JDEC
+, depdec AS DEPDEC
+, comdec AS COMDEC
+, anais AS ANAIS
+, mnais AS MNAIS
+, jnais AS JNAIS
+, sexe AS SEXE 
+, """" AS COMDOM
+, """" AS LIEUDEC2
+--attention variables à modifier selon la date de MAJ
+, CASE 
+	WHEN adec = 2024 AND mdec = 11 THEN 1.0115
+	WHEN adec = 2024 AND mdec = 10 THEN 1.003
+	WHEN adec = 2024 AND mdec = 9 THEN 1.001
+	ELSE 1
+END AS Total
+FROM ""sa_insee_deces_20250114""
+WHERE 1=1
+AND adec = 2024
+--attention variables à modifier selon la date de MAJ
+--AND mdec != 7
+)
+--
+--
+--
+, insee_geo AS (
+SELECT 
+ref_insee_region.REG AS REGION_CD
+,ref_insee_region.libelle AS REGION_LB
+,ref_insee_departement.DEP AS DEP_CD
+,ref_insee_departement.LIBELLE AS DEP_LB
+,communes.COM AS COM_CD
+,communes.LIBELLE AS COM_LB
+,ADEC AS DECES_ANNEE
+,MDEC AS DECES_MOIS
+,JDEC AS DECES_JOUR
+,LIEUDEC2 AS DECES_LIEU
+,Total AS DECES_NB
+FROM sa_insee_total
+LEFT JOIN (
+	SELECT 
+	CAST(COM AS VARCHAR) AS COM
+	, LIBELLE 
+	, MAX(SUBSTR(COM, 1, 2)) AS DEP
+	FROM ref_insee_communes
+	WHERE 1=1
+	GROUP BY COM
+	UNION 
+	SELECT
+	CAST(COM AS VARCHAR) AS COM
+	, LIBELLE 
+	, MAX(SUBSTR(COM, 1, 2)) AS DEP
+	FROM ref_insee_communes_histo
+	WHERE 1=1
+	AND COM NOT IN (
+		SELECT 
+		COM
+		FROM ref_insee_communes
+		WHERE 1=1
+		)
+	GROUP BY COM
+) communes ON IIF(LENGTH(sa_insee_total.COMDEC)=4, ""0"" || sa_insee_total.COMDEC, sa_insee_total.COMDEC) = communes.COM
+LEFT JOIN ref_insee_departement ON sa_insee_total.DEPDEC = ref_insee_departement.DEP 
+--LEFT JOIN ref_insee_departement ON SUBSTR(COMDEC, 1, 2) = ref_insee_departement.DEP 
+LEFT JOIN ref_insee_region ON ref_insee_departement.REG = ref_insee_region.reg 
+WHERE LENGTH(ADEC)=4)
+--
+--
+--
+SELECT 
+REGION_CD
+, REGION_LB
+, DEP_CD
+, DEP_LB
+, COM_CD
+, COM_LB
+, DECES_ANNEE
+, DECES_MOIS
+, DECES_JOUR
+, DECES_LIEU
+, SUM(DECES_NB) AS DECES_NB
+FROM insee_geo
+GROUP BY 
+REGION_CD
+, REGION_LB
+, DEP_CD
+, DEP_LB
+, COM_CD
+, COM_LB
+, DECES_ANNEE
+, DECES_MOIS
+, DECES_JOUR
+, DECES_LIEU"
+view,ods_insern,ods_insern,0,"CREATE VIEW ods_insern AS
+WITH 
+-- N-2
+N_2 AS (
+SELECT 
+*
+FROM sa_insern_n_2_n_1
+WHERE 1 = 1
+-- param à variabiliser dans le code
+AND Annee = 2022)
+, N_1 AS (
+SELECT 
+*
+FROM ""CertDCInsern""
+WHERE 1 = 1
+-- param à variabiliser dans le code
+AND Annee = 2023)
+, N AS (
+SELECT 
+*
+FROM ""CertDCInsern""
+WHERE 1 = 1
+-- param à variabiliser dans le code
+AND Annee = 2024)
+, consolide AS (
+SELECT * FROM N_2
+UNION SELECT * FROM N_1
+UNION SELECT * FROM N)
+SELECT 
+Annee
+, Mois
+, Jour
+, CASE
+	WHEN LENGTH(departement_code)=1 THEN ""0"" || departement_code
+	ELSE departement_code
+END
+AS departement_code
+, CASE
+	WHEN (LENGTH(departement_code) = 3 AND LENGTH(commune_code) = 1) THEN ""0"" || commune_code
+	WHEN (LENGTH(departement_code) = 2 AND LENGTH(commune_code) = 1) THEN ""00"" || commune_code
+	WHEN (LENGTH(departement_code) = 2 AND LENGTH(commune_code) = 2) THEN ""0"" || commune_code
+	WHEN (LENGTH(departement_code) = 1 AND LENGTH(commune_code) = 1) THEN ""00"" || commune_code
+	WHEN (LENGTH(departement_code) = 1 AND LENGTH(commune_code) = 2) THEN ""0"" || commune_code
+	ELSE commune_code
+END
+AS commune_code
+, et_finess
+, Lieu_de_deces
+, ""Source""
+, deces_nb
+FROM consolide"
+view,ods_insern_edc,ods_insern_edc,0,"CREATE VIEW ods_insern_edc AS 
+WITH
+insern AS (
+SELECT 
+ref_insee_region.reg AS REG_CD
+,ref_insee_region.libelle AS REG_LB
+,ref_insee_departement.DEP AS DEP_CD
+,ref_insee_departement.LIBELLE AS DEP_LB
+,departement_code || commune_code AS COM_CD
+,communes.LIBELLE AS COM_LB
+,t_finess.ej_finess AS EJ_FINESS_CD
+,t_finess.ej_rs AS EJ_FINESS_LB
+,t_finess.categ_code AS CAT_ETAB_CD
+,t_finess.categ_lib AS CAT_ETAB_LB
+,ods_insern.et_finess AS FINESS_CD
+,t_finess.rs AS FINESS_LB
+,Annee AS DECES_ANNEE
+,Mois AS DECES_MOIS
+,Jour AS DECES_JOUR
+,Lieu_de_deces AS DECES_LIEU
+,ods_insern.source AS DECES_SRC
+,deces_nb AS DECES_NB
+FROM ods_insern
+LEFT JOIN (
+	SELECT 
+	CAST(COM AS VARCHAR) AS COM
+	, LIBELLE 
+	, MAX(SUBSTR(COM, 1, 2)) AS DEP
+	FROM ref_insee_communes
+	WHERE 1=1
+	GROUP BY COM
+	UNION 
+	SELECT
+	CAST(COM AS VARCHAR) AS COM
+	, LIBELLE 
+	, MAX(SUBSTR(COM, 1, 2)) AS DEP
+	FROM ref_insee_communes_histo
+	WHERE 1=1
+	AND COM NOT IN (
+		SELECT 
+		COM
+		FROM ref_insee_communes
+		WHERE 1=1
+		)
+	GROUP BY COM
+	) communes ON (departement_code || commune_code) = communes.COM
+LEFT JOIN ref_insee_departement ON departement_code = ref_insee_departement.DEP 
+LEFT JOIN ref_insee_region ON ref_insee_departement.REG = ref_insee_region.reg 
+LEFT JOIN ""z_old_CertDCTFiness"" t_finess ON ods_insern.et_finess = t_finess.finess)
+, finess_categories AS (
+SELECT 
+finess 
+, IIF(categ_niv2_code = ""1100"" 
+	OR categ_niv2_code = ""1200"", categ_niv2_code, 
+		IIF(categ_niv3_code = ""2103""
+		OR categ_niv3_code = ""2205""
+		OR categ_niv3_code = ""3406""
+		OR categ_niv3_code = ""3407""
+		OR categ_niv3_code = ""4401""
+		OR categ_niv3_code = ""4402""
+		OR categ_niv3_code = ""4404"", categ_niv3_code, 
+			IIF(categ_code = ""433""
+			OR categ_code = ""188"", categ_code, ""999"") 
+		)
+	) AS CAT_ETAB_CD
+, IIF(categ_niv2_code = ""1100"" 
+	OR categ_niv2_code = ""1200"", categ_niv2_lib, 
+		IIF(categ_niv3_code = ""2103""
+		OR categ_niv3_code = ""2205""
+		OR categ_niv3_code = ""3406""
+		OR categ_niv3_code = ""3407""
+		OR categ_niv3_code = ""4401""
+		OR categ_niv3_code = ""4402""
+		OR categ_niv3_code = ""4404"", categ_niv3_lib, 
+			IIF(categ_code = ""433""
+			OR categ_code = ""188"", categ_lib, ""Autre"")
+		)
+	) AS CAT_ETAB_LB
+FROM ""CertDCTFiness"" t_finess)
+SELECT 
+insern.REG_CD
+, insern.REG_LB
+, insern.DEP_CD
+, insern.DEP_LB
+, insern.COM_CD
+, insern.COM_LB
+, insern.EJ_FINESS_CD
+, insern.EJ_FINESS_LB
+, finess_categories.CAT_ETAB_CD
+, finess_categories.CAT_ETAB_LB
+, insern.FINESS_CD
+, insern.FINESS_LB
+, insern.DECES_ANNEE
+, insern.DECES_MOIS
+, insern.DECES_JOUR
+, insern.DECES_LIEU
+, insern.DECES_SRC
+, insern.DECES_NB
+FROM insern
+LEFT JOIN finess_categories ON insern.FINESS_CD = finess_categories.finess"
+view,ods_insern_insee_tx_edc,ods_insern_insee_tx_edc,0,"CREATE VIEW ods_insern_insee_tx_edc AS
+WITH brut_insee_deces AS (
+SELECT 
+REGION_CD
+|| DEP_CD 
+|| COM_CD 
+|| DECES_ANNEE 
+|| IIF(LENGTH(DECES_MOIS) = 1, 0 || DECES_MOIS, DECES_MOIS)
+|| IIF(LENGTH(DECES_JOUR) = 1, 0 || DECES_JOUR, DECES_JOUR)
+AS ID_REF
+, REGION_CD AS REG_CD
+, REGION_LB AS REG_LB
+, DEP_CD AS DEP_CD
+, DEP_LB AS DEP_LB
+, COM_CD AS COM_CD
+, COM_LB AS COM_LB
+, DECES_ANNEE
+, DECES_MOIS
+, DECES_JOUR
+, SUM(DECES_NB) AS DECES_NB
+FROM ods_insee
+GROUP BY
+REGION_CD 
+, REGION_LB 
+, DEP_CD 
+, DEP_LB 
+, COM_CD 
+, COM_LB 
+, DECES_ANNEE
+, DECES_MOIS
+, DECES_JOUR)
+--
+--
+--
+, brut_insern_edc AS (
+	SELECT 
+	IIF(
+		(ref_insee_region.REG 
+		|| ref_insee_departement.DEP  
+		|| communes.COM 
+		|| Annee 
+		|| IIF(LENGTH(Mois) = 1, 0 || Mois, Mois)
+		|| IIF(LENGTH(Jour) = 1, 0 || Jour, Jour)) IS NULL
+	, ""NULL""
+	, (
+		ref_insee_region.REG 
+		|| ref_insee_departement.DEP  
+		|| communes.COM 
+		|| Annee 
+		|| IIF(LENGTH(Mois) = 1, 0 || Mois, Mois)
+		|| IIF(LENGTH(Jour) = 1, 0 || Jour, Jour)))
+	AS ID_REF
+	,ref_insee_region.REG AS REG_CD
+	,ref_insee_region.libelle AS REG_LB
+	,ref_insee_departement.DEP AS DEP_CD
+	,ref_insee_departement.LIBELLE AS DEP_LB
+	,communes.COM AS COM_CD
+	,communes.LIBELLE AS COM_LB
+	,Annee AS DECES_ANNEE
+	,Mois AS DECES_MOIS
+	,Jour AS DECES_JOUR
+	,SUM(deces_nb) AS DECES_NB
+	FROM ods_insern
+	LEFT JOIN (
+		SELECT 
+		CAST(COM AS VARCHAR) AS COM
+		, LIBELLE 
+		, MAX(SUBSTR(COM, 1, 2)) AS DEP
+		FROM ref_insee_communes
+		WHERE 1=1
+		GROUP BY COM
+		UNION 
+		SELECT
+		CAST(COM AS VARCHAR) AS COM
+		, LIBELLE 
+		, MAX(SUBSTR(COM, 1, 2)) AS DEP
+		FROM ref_insee_communes_histo
+		WHERE 1=1
+		AND COM NOT IN (
+			SELECT 
+			COM
+			FROM ref_insee_communes
+			WHERE 1=1
+			)
+		GROUP BY COM
+		) communes ON (departement_code || commune_code) = communes.COM
+	LEFT JOIN ref_insee_departement ON departement_code = ref_insee_departement.DEP 
+	LEFT JOIN ref_insee_region ON ref_insee_departement.REG = ref_insee_region.reg 
+	LEFT JOIN ""z_old_CertDCTFiness"" t_finess ON ods_insern.et_finess = t_finess.finess
+	GROUP BY 
+	ref_insee_region.REG 
+	,ref_insee_region.libelle 
+	,ref_insee_departement.DEP
+	,ref_insee_departement.LIBELLE 
+	,communes.COM 
+	,communes.LIBELLE 
+	,Annee 
+	,Mois
+	,Jour
+	)
+--
+--
+--
+, base AS (
+SELECT 
+ID_REF 
+FROM brut_insee_deces
+UNION 
+SELECT 
+ID_REF 
+FROM brut_insern_edc
+)
+--
+--
+--	
+SELECT 
+--SUM(brut_insern_edc.DECES_NB)
+--, SUM(brut_insee_deces.DECES_NB)
+base.ID_REF
+, IIF(brut_insee_deces.REG_CD IS NOT NULL, brut_insee_deces.REG_CD, brut_insern_edc.REG_CD) AS REG_CD
+, IIF(brut_insee_deces.REG_LB IS NOT NULL, brut_insee_deces.REG_LB, brut_insern_edc.REG_LB) AS REG_LB
+, IIF(brut_insee_deces.DEP_CD IS NOT NULL, brut_insee_deces.DEP_CD, brut_insern_edc.DEP_CD) AS DEP_CD
+, IIF(brut_insee_deces.DEP_LB IS NOT NULL, brut_insee_deces.DEP_LB, brut_insern_edc.DEP_LB) AS DEP_LB
+, IIF(brut_insee_deces.COM_CD IS NOT NULL, brut_insee_deces.COM_CD, brut_insern_edc.COM_CD) AS COM_CD
+, IIF(brut_insee_deces.COM_LB IS NOT NULL, brut_insee_deces.COM_LB, brut_insern_edc.COM_LB) AS COM_LB
+, IIF(brut_insee_deces.DECES_ANNEE IS NOT NULL, brut_insee_deces.DECES_ANNEE, brut_insern_edc.DECES_ANNEE) AS DECES_ANNEE
+, IIF(brut_insee_deces.DECES_MOIS IS NOT NULL, brut_insee_deces.DECES_MOIS, brut_insern_edc.DECES_MOIS) AS DECES_MOIS
+, IIF(brut_insee_deces.DECES_JOUR IS NOT NULL, brut_insee_deces.DECES_JOUR, brut_insern_edc.DECES_JOUR) AS DECES_JOUR
+, brut_insern_edc.DECES_NB AS EDC_NB
+, brut_insee_deces.DECES_NB AS DECES_TOT_NB
+FROM base
+LEFT JOIN brut_insee_deces ON base.ID_REF = brut_insee_deces.ID_REF
+LEFT JOIN brut_insern_edc ON base.ID_REF = brut_insern_edc.ID_REF"
+view,ods_insern_pmsi_es,ods_insern_pmsi_es,0,"CREATE VIEW ods_insern_pmsi_es AS
+WITH 
+finess_categories AS (
+SELECT 
+finess 
+, IIF(categ_niv2_code = ""1100"" 
+	OR categ_niv2_code = ""1200"", categ_niv2_code, 
+		IIF(categ_niv3_code = ""2103""
+		OR categ_niv3_code = ""2205""
+		OR categ_niv3_code = ""3406""
+		OR categ_niv3_code = ""3407""
+		OR categ_niv3_code = ""4401""
+		OR categ_niv3_code = ""4402""
+		OR categ_niv3_code = ""4404"", categ_niv3_code, 
+			IIF(categ_code = ""433""
+			OR categ_code = ""188"", categ_code, ""999"") 
+		)
+	) AS CAT_ETAB_CD
+, IIF(categ_niv2_code = ""1100"" 
+	OR categ_niv2_code = ""1200"", categ_niv2_lib, 
+		IIF(categ_niv3_code = ""2103""
+		OR categ_niv3_code = ""2205""
+		OR categ_niv3_code = ""3406""
+		OR categ_niv3_code = ""3407""
+		OR categ_niv3_code = ""4401""
+		OR categ_niv3_code = ""4402""
+		OR categ_niv3_code = ""4404"", categ_niv3_lib, 
+			IIF(categ_code = ""433""
+			OR categ_code = ""188"", categ_lib, ""Autre"")
+		)
+	) AS CAT_ETAB_LB
+FROM ""CertDCTFiness"" t_finess
+)
+, brut_insern_edc AS (
+SELECT 
+	ref_insee_region.reg AS REG_CD
+	,ref_insee_region.libelle AS REG_LB
+	,ref_insee_departement.DEP AS DEP_CD
+	,ref_insee_departement.LIBELLE AS DEP_LB
+	,t_finess.com_code AS COM_CD
+	,communes.LIBELLE AS COM_LB
+	,t_finess.ej_finess AS EJ_FINESS_CD
+	,t_finess.ej_rs AS EJ_FINESS_LB
+	,t_finess.categ_code AS CAT_ETAB_CD
+	,t_finess.categ_lib AS CAT_ETAB_LB
+	,IIF(LENGTH(ods_insern.et_finess)=9,ods_insern.et_finess,""0""||ods_insern.et_finess) AS FINESS_CD
+	,t_finess.rs AS FINESS_LB
+	,Annee AS DECES_ANNEE
+	,Mois AS DECES_MOIS
+	,Jour AS DECES_JOUR
+	,Lieu_de_deces AS DECES_LIEU
+	,ods_insern.source AS DECES_SRC
+	,deces_nb AS DECES_NB
+	FROM ods_insern
+	LEFT JOIN ""CertDCTFiness"" t_finess ON IIF(LENGTH(ods_insern.et_finess)=9,ods_insern.et_finess,""0""||ods_insern.et_finess) = t_finess.finess
+	LEFT JOIN (
+		SELECT 
+		CAST(COM AS VARCHAR) AS COM
+		, LIBELLE 
+		, MAX(SUBSTR(COM, 1, 2)) AS DEP
+		FROM ref_insee_communes
+		WHERE 1=1
+		GROUP BY COM
+		UNION 
+		SELECT
+		CAST(COM AS VARCHAR) AS COM
+		, LIBELLE 
+		, MAX(SUBSTR(COM, 1, 2)) AS DEP
+		FROM ref_insee_communes_histo
+		WHERE 1=1
+		AND COM NOT IN (
+			SELECT 
+			COM
+			FROM ref_insee_communes
+			WHERE 1=1
+			)
+		GROUP BY COM
+		) communes ON t_finess.com_code = communes.COM
+LEFT JOIN ref_insee_departement ON communes.DEP = ref_insee_departement.DEP 
+LEFT JOIN ref_insee_region ON ref_insee_departement.REG = ref_insee_region.reg 
+WHERE 1=1 
+AND LENGTH(IIF(LENGTH(ods_insern.et_finess)=9,ods_insern.et_finess,""0""||ods_insern.et_finess)) = 9
+	)
+, agg_annee_insern_edc AS (
+	SELECT 
+	FINESS_CD || DECES_ANNEE AS ID_REF
+	, REG_CD
+	, REG_LB
+	, DEP_CD
+	, DEP_LB
+	, COM_CD
+	, COM_LB
+	, EJ_FINESS_CD
+	, EJ_FINESS_LB
+	, CAT_ETAB_CD
+	, CAT_ETAB_LB
+	, FINESS_CD
+	, FINESS_LB
+	, DECES_ANNEE
+	, SUM(DECES_NB) AS EDC_NB
+	FROM brut_insern_edc
+	GROUP BY
+	FINESS_CD || DECES_ANNEE
+	, REG_CD
+	, REG_LB
+	, DEP_CD
+	, DEP_LB
+	, COM_CD
+	, COM_LB
+	, EJ_FINESS_CD
+	, EJ_FINESS_LB
+	, CAT_ETAB_CD
+	, CAT_ETAB_LB
+	, FINESS_CD
+	, FINESS_LB
+	, DECES_ANNEE
+)
+, brut_pmsi_deces AS (
+	SELECT 
+	ref_insee_region.REG AS REG_CD
+	,ref_insee_region.libelle AS REG_LB
+	,ref_insee_departement.DEP AS DEP_CD
+	,ref_insee_departement.LIBELLE AS DEP_LB
+	,t_finess.com_code AS COM_CD
+	,communes.LIBELLE AS COM_LB
+	,t_finess.ej_finess AS EJ_FINESS_CD
+	,t_finess.ej_rs AS EJ_FINESS_LB
+	,t_finess.categ_code AS CAT_ETAB_CD
+	,t_finess.categ_lib AS CAT_ETAB_LB
+	,""ods_pmsi"".finess AS FINESS_CD
+	,t_finess.rs AS FINESS_LB
+	,""ods_pmsi"".annee AS DECES_ANNEE 
+	,""ods_pmsi"".mois AS DECES_MOIS
+	,""ods_pmsi"".""source"" AS DECES_SOURCE
+	,""ods_pmsi"".deces_nb AS DECES_NB
+	FROM ""ods_pmsi""
+	LEFT JOIN ""z_old_CertDCTFiness"" t_finess ON IIF(LENGTH(""ods_pmsi"".finess)=8, ""0"" || ""ods_pmsi"".finess, ""ods_pmsi"".finess) = t_finess.finess
+	LEFT JOIN (
+		SELECT 
+		CAST(COM AS VARCHAR) AS COM
+		, LIBELLE 
+		, MAX(SUBSTR(COM, 1, 2)) AS DEP
+		FROM ref_insee_communes
+		WHERE 1=1
+		GROUP BY COM
+		UNION 
+		SELECT
+		CAST(COM AS VARCHAR) AS COM
+		, LIBELLE 
+		, MAX(SUBSTR(COM, 1, 2)) AS DEP
+		FROM ref_insee_communes_histo
+		WHERE 1=1
+		AND COM NOT IN (
+			SELECT 
+			COM
+			FROM ref_insee_communes
+			WHERE 1=1
+			)
+		GROUP BY COM
+	) communes ON t_finess.com_code = communes.COM
+	LEFT JOIN ref_insee_departement ON communes.DEP = ref_insee_departement.DEP 
+	LEFT JOIN ref_insee_region ON ref_insee_departement.REG = ref_insee_region.reg 
+)
+, agg_annee_pmsi_deces AS (
+	SELECT 
+	FINESS_CD || DECES_ANNEE AS ID_REF
+	, REG_CD
+	, REG_LB
+	, DEP_CD
+	, DEP_LB
+	, COM_CD
+	, COM_LB
+	, EJ_FINESS_CD
+	, EJ_FINESS_LB
+	, CAT_ETAB_CD
+	, CAT_ETAB_LB
+	, FINESS_CD
+	, FINESS_LB
+	, DECES_ANNEE
+	, SUM(DECES_NB) AS DECES_NB
+	FROM brut_pmsi_deces
+	GROUP BY
+	FINESS_CD || DECES_ANNEE
+	, REG_CD
+	, REG_LB
+	, DEP_CD
+	, DEP_LB
+	, COM_CD
+	, COM_LB
+	, EJ_FINESS_CD
+	, EJ_FINESS_LB
+	, CAT_ETAB_CD
+	, CAT_ETAB_LB
+	, FINESS_CD
+	, FINESS_LB
+	, DECES_ANNEE
+)
+, base AS (
+SELECT ID_REF FROM agg_annee_pmsi_deces
+UNION SELECT ID_REF FROM agg_annee_insern_edc
+)
+, agg_all AS (
+	SELECT 
+	base.ID_REF
+	, IIF(agg_annee_pmsi_deces.REG_CD IS NOT NULL,agg_annee_pmsi_deces.REG_CD,agg_annee_insern_edc.REG_CD) AS REG_CD
+	, IIF(agg_annee_pmsi_deces.REG_LB IS NOT NULL,agg_annee_pmsi_deces.REG_LB,agg_annee_insern_edc.REG_LB) AS REG_LB
+	, IIF(agg_annee_pmsi_deces.DEP_CD IS NOT NULL,agg_annee_pmsi_deces.DEP_CD,agg_annee_insern_edc.DEP_CD) AS DEP_CD
+	, IIF(agg_annee_pmsi_deces.DEP_LB IS NOT NULL,agg_annee_pmsi_deces.DEP_LB,agg_annee_insern_edc.DEP_LB) AS DEP_LB
+	, IIF(agg_annee_pmsi_deces.COM_CD IS NOT NULL,agg_annee_pmsi_deces.COM_CD,agg_annee_insern_edc.COM_CD) AS COM_CD
+	, IIF(agg_annee_pmsi_deces.COM_LB IS NOT NULL,agg_annee_pmsi_deces.COM_LB,agg_annee_insern_edc.COM_LB) AS COM_LB
+	, IIF(agg_annee_pmsi_deces.EJ_FINESS_CD IS NOT NULL,agg_annee_pmsi_deces.EJ_FINESS_CD,agg_annee_insern_edc.EJ_FINESS_CD) AS EJ_FINESS_CD
+	, IIF(agg_annee_pmsi_deces.EJ_FINESS_LB IS NOT NULL,agg_annee_pmsi_deces.EJ_FINESS_LB,agg_annee_insern_edc.EJ_FINESS_LB) AS EJ_FINESS_LB
+	, IIF(agg_annee_pmsi_deces.CAT_ETAB_CD IS NOT NULL,agg_annee_pmsi_deces.CAT_ETAB_CD,agg_annee_insern_edc.CAT_ETAB_CD) AS CAT_ETAB_CD
+	, IIF(agg_annee_pmsi_deces.CAT_ETAB_LB IS NOT NULL,agg_annee_pmsi_deces.CAT_ETAB_LB,agg_annee_insern_edc.CAT_ETAB_LB) AS CAT_ETAB_LB
+	, IIF(agg_annee_pmsi_deces.FINESS_CD IS NOT NULL,agg_annee_pmsi_deces.FINESS_CD,agg_annee_insern_edc.FINESS_CD) AS FINESS_CD
+	, IIF(agg_annee_pmsi_deces.FINESS_LB IS NOT NULL,agg_annee_pmsi_deces.FINESS_LB,agg_annee_insern_edc.FINESS_LB) AS FINESS_LB
+	, IIF(agg_annee_pmsi_deces.DECES_ANNEE IS NOT NULL,agg_annee_pmsi_deces.DECES_ANNEE,agg_annee_insern_edc.DECES_ANNEE) AS DECES_ANNEE
+	, EDC_NB
+	, DECES_NB
+	FROM base 
+	LEFT JOIN agg_annee_pmsi_deces ON base.ID_REF = agg_annee_pmsi_deces.ID_REF
+	LEFT JOIN agg_annee_insern_edc ON base.id_ref = agg_annee_insern_edc.id_ref
+)
+, tmp_categories AS (
+SELECT 
+FINESS_CD
+, FINESS_LB
+, DECES_ANNEE
+, SUM(EDC_NB) AS EDC_NB
+, SUM(DECES_NB) AS DECES_NB
+FROM agg_all
+WHERE DECES_ANNEE = 2023
+GROUP BY
+FINESS_CD
+, FINESS_LB
+, DECES_ANNEE)
+--
+--
+--
+, categories AS (
+SELECT 
+FINESS_CD
+, FINESS_LB
+, DECES_ANNEE
+, IIF(EDC_NB IS NULL, 0, EDC_NB) AS EDC_NB
+, DECES_NB
+, IIF (DECES_NB < 100
+			, ""<100""
+			, IIF (DECES_NB >= 100 AND DECES_NB < 250
+				, "">=100 et <250""
+				, IIF (DECES_NB >= 250 AND DECES_NB < 500
+					, "">=250 et <500""
+					, IIF (DECES_NB >= 500 AND DECES_NB < 1000
+						, "">=500 et <1000""
+						, IIF (DECES_NB >= 1000
+							, "">=1000""
+							, """"
+					)
+				)
+			)
+		)
+	) AS CATEGORIE_NB_DECES
+, IIF(
+	EDC_NB IS NULL AND DECES_NB IS NOT NULL
+		, ""0%""
+		, IIF ((ROUND((CAST((CAST(EDC_NB AS FLOAT) / CAST(DECES_NB AS FLOAT)) AS FLOAT) * 100), 2)) < 50
+			, ""<50%""
+			, IIF ((ROUND((CAST((CAST(EDC_NB AS FLOAT) / CAST(DECES_NB AS FLOAT)) AS FLOAT) * 100), 2)) >= 50 AND (ROUND((CAST((CAST(EDC_NB AS FLOAT) / CAST(DECES_NB AS FLOAT)) AS FLOAT) * 100), 2)) < 70
+				, "">=50% et <70%""
+				, IIF ((ROUND((CAST((CAST(EDC_NB AS FLOAT) / CAST(DECES_NB AS FLOAT)) AS FLOAT) * 100), 2)) >= 70 AND (ROUND((CAST((CAST(EDC_NB AS FLOAT) / CAST(DECES_NB AS FLOAT)) AS FLOAT) * 100), 2)) < 90
+					, "">=70% et <90%""
+					, IIF ((ROUND((CAST((CAST(EDC_NB AS FLOAT) / CAST(DECES_NB AS FLOAT)) AS FLOAT) * 100), 2)) >= 90 AND (ROUND((CAST((CAST(EDC_NB AS FLOAT) / CAST(DECES_NB AS FLOAT)) AS FLOAT) * 100), 2)) < 100
+						, "">=90%""
+						, ""N.A.""		
+				)
+			)
+		)
+	)
+) AS CATEGORIE_TAUX_EDC
+FROM tmp_categories)
+SELECT 
+agg_all.ID_REF
+, agg_all.REG_CD
+, agg_all.REG_LB
+, agg_all.DEP_CD
+, agg_all.DEP_LB
+, agg_all.COM_CD
+, agg_all.COM_LB
+, agg_all.EJ_FINESS_CD
+, agg_all.EJ_FINESS_LB
+, finess_categories.CAT_ETAB_CD
+, finess_categories.CAT_ETAB_LB
+, agg_all.FINESS_CD
+, agg_all.FINESS_LB
+, agg_all.DECES_ANNEE
+, categories.CATEGORIE_NB_DECES
+, categories.CATEGORIE_TAUX_EDC
+, agg_all.EDC_NB
+, agg_all.DECES_NB
+FROM agg_all
+LEFT JOIN categories ON agg_all.FINESS_CD = categories.FINESS_CD
+LEFT JOIN finess_categories ON agg_all.FINESS_CD = finess_categories.finess"
+view,ods_pmsi,ods_pmsi,0,"CREATE VIEW ods_pmsi AS 
+WITH 
+--mco_ssr_had_psy
+mco_ssr_had_psy AS (
+SELECT 
+""source""
+, finess
+, annee
+, mois
+, SUM(deces_nb) AS deces_nb
+FROM (
+	SELECT 
+	""mco_ssr_had_psy"" AS ""source""
+	, SUBSTR(FINESS, 1, 9) AS finess
+	, CAST(SUBSTR(Mois, (LENGTH(Mois)-3), 4) AS INTEGER) AS annee
+	, CASE 
+		WHEN Mois LIKE ""Jan%"" THEN 1
+		WHEN Mois LIKE ""Fév%"" THEN 2
+		WHEN Mois LIKE ""Mar%"" THEN 3
+		WHEN Mois LIKE ""Avr%"" THEN 4
+		WHEN Mois LIKE ""Mai%"" THEN 5
+		WHEN Mois LIKE ""juin%"" THEN 6
+		WHEN Mois LIKE ""juil%"" THEN 7
+		WHEN Mois LIKE ""Août%"" THEN 8
+		WHEN Mois LIKE ""Sept%"" THEN 9
+		WHEN Mois LIKE ""Oct%"" THEN 10
+		WHEN Mois LIKE ""Nov%"" THEN 11
+		WHEN Mois LIKE ""Déc%"" THEN 12
+	END AS mois
+	, (
+			""Somme de MCO Hors Séances""
+			+""Somme de MCO Séances""
+			+""Somme de SSR""
+			+""Somme de HAD""
+			+""Somme de PSY"")
+	AS deces_nb
+	FROM ""sa_diamant_deces_pmsi_20250115""
+	WHERE 1 = 1
+	AND FINESS != ""Non précisée"") sa_pmsi_tmp
+GROUP BY 
+""source""
+, finess
+, annee
+, mois)
+--
+--
+--
+-- rpu 2022 2023
+, rpu AS (SELECT 
+""source""
+, finess
+, annee
+, mois
+, SUM(deces_nb) AS deces_nb
+FROM (
+	SELECT 
+	""rpu"" AS ""source""
+	, SUBSTR(FINESS, 1, 9) AS finess
+	, CAST(SUBSTR(Mois, (LENGTH(Mois)-3), 4) AS INTEGER) AS annee
+	, CASE 
+		WHEN Mois LIKE ""Jan%"" THEN 1
+		WHEN Mois LIKE ""Fév%"" THEN 2
+		WHEN Mois LIKE ""Mar%"" THEN 3
+		WHEN Mois LIKE ""Avr%"" THEN 4
+		WHEN Mois LIKE ""Mai%"" THEN 5
+		WHEN Mois LIKE ""juin%"" THEN 6
+		WHEN Mois LIKE ""juil%"" THEN 7
+		WHEN Mois LIKE ""Août%"" THEN 8
+		WHEN Mois LIKE ""Sept%"" THEN 9
+		WHEN Mois LIKE ""Oct%"" THEN 10
+		WHEN Mois LIKE ""Nov%"" THEN 11
+		WHEN Mois LIKE ""Déc%"" THEN 12
+	END AS mois
+	, Total
+	AS deces_nb
+	FROM ""sa_diamant_deces_rpu_20250115"" 
+	WHERE 1 = 1
+	AND FINESS != ""Non précisée"") sa_rpu_tmp
+GROUP BY 
+""source""
+, finess
+, annee
+, mois)
+--
+--
+--
+--esms 2022
+, esms AS (
+SELECT 
+""source""
+, finess
+, annee
+, mois
+, SUM(deces_nb) AS deces_nb
+FROM (
+	SELECT 
+	""esms"" AS ""source""
+	, SUBSTR(FINESS, 1, 9) AS finess
+	, ANNEE AS annee
+	, """" AS mois
+	, Total AS deces_nb
+	FROM ""sa_diamant_deces_esms_20250115"") sa_esms_tmp
+GROUP BY
+""source""
+, finess
+, annee
+, mois)
+--
+--
+--
+--usld
+, usld AS (
+SELECT 
+""source""
+, finess
+, annee
+, mois
+, SUM(deces_nb) AS deces_nb
+FROM (
+	SELECT 
+	""usld"" AS ""source""
+	, SUBSTR(FINESS, 1, 9) AS finess
+	, Année AS annee
+	, """" AS mois
+	, Total AS deces_nb
+	FROM ""sa_diamant_deces_usld_20250115"" 
+	WHERE 1 = 1
+	AND FINESS != ""Non précisée"") sa_ulsd_tmp
+GROUP BY 
+""source""
+, finess
+, annee
+, mois
+)
+--
+--
+--
+SELECT 
+*
+FROM 
+(SELECT * FROM mco_ssr_had_psy
+UNION
+SELECT * FROM rpu
+UNION
+SELECT * FROM esms
+UNION
+SELECT * FROM usld) union_all
+WHERE annee != ""USLD"""
