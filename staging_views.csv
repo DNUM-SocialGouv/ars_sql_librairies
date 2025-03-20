@@ -1,5 +1,5 @@
-name,sql
-SiiceaInputTest,"CREATE VIEW SiiceaInputTest AS
+"name";"sql"
+SiiceaInputTest;"CREATE VIEW SiiceaInputTest AS
  SELECT 
 COUNT(*) AS ""Nombre de lignes""
 , COUNT(DISTINCT ""Identifiant de la mission"") AS ""Nombre distint d'id de missions""
@@ -13,7 +13,7 @@ COUNT(*) AS ""Nombre de lignes""
 , MAX(SUBSTR(""Date réelle """"Visite"""""",1,4)) AS ""Année max""
 , MAX(SUBSTR(""Date réelle """"Visite"""""",6,2)) AS ""Mois max""
 FROM sa_siicea_missions_20240930"
-HeliosSiiceaMissionsTest,"CREATE VIEW HeliosSiiceaMissionsTest AS
+HeliosSiiceaMissionsTest;"CREATE VIEW HeliosSiiceaMissionsTest AS
  SELECT 
 COUNT(*) AS ""Nombre de lignes""
 , COUNT(DISTINCT ""Identifiant de la mission"") AS ""Nombre distint d'id de missions""
@@ -27,7 +27,7 @@ COUNT(*) AS ""Nombre de lignes""
 , MAX(SUBSTR(""Date réelle """"Visite"""""",1,4)) AS ""Année max""
 , MAX(SUBSTR(""Date réelle """"Visite"""""",6,2)) AS ""Mois max""
 FROM HeliosSiiceaMissions"
-SirecInputTest,"CREATE VIEW SirecInputTest AS 
+SirecInputTest;"CREATE VIEW SirecInputTest AS 
 SELECT 
 COUNT(*) AS ""Nombre de lignes""
 , COUNT(DISTINCT ""Numéro de la réclamation"") AS ""Nombre distinct de réclamations""
@@ -40,7 +40,7 @@ COUNT(*) AS ""Nombre de lignes""
 , MAX(SUBSTR(""Date de réception à l’ARS"",1,4)) AS ""Année max""
 , MAX(SUBSTR(""Date de réception à l’ARS"",6,2)) AS ""Mois max""
 FROM sa_sirec_20241014"
-DGCSQuery,"CREATE VIEW DGCSQuery AS
+DGCSQuery;"CREATE VIEW DGCSQuery AS
 WITH 
 Finess AS (SELECT 
 	finess
@@ -149,7 +149,7 @@ FROM
 	Finess
 LEFT JOIN 
 	ModeActivite ON Finess.finess = ModeActivite.numero_finess_et"
-CertDCInsern,"CREATE VIEW CertDCInsern AS 
+CertDCInsern;"CREATE VIEW CertDCInsern AS 
 SELECT 
 rowid AS ""index""
 , Annee
@@ -162,7 +162,7 @@ rowid AS ""index""
 , ""Source""
 , 1 AS deces_nb
 FROM sa_insern_20250114"
-CertDCTFiness,"CREATE VIEW CertDCTFiness AS
+CertDCTFiness;"CREATE VIEW CertDCTFiness AS
 SELECT 
  Column1
 , source
@@ -252,7 +252,7 @@ SELECT
 , geoloc_4326_long
 , geoloc_4326_lat
 FROM sa_t_finess_20250113"
-MatriceSirec,"CREATE VIEW MatriceSirec AS 
+MatriceSirec;"CREATE VIEW MatriceSirec AS 
 SELECT 
 ""Numéro de la réclamation""
 , ""Ancien numéro de la réclamation""
@@ -330,7 +330,7 @@ FROM sa_sirec_20250114
 WHERE 1=1
 AND (LENGTH(""N° FINESS/RPPS"") = 9 OR LENGTH(""N° FINESS/RPPS"") = 8)
 AND ""Date de réception à l’ARS"" < '2024-12-31'"
-HeliosSiiceaMissions,"CREATE VIEW HeliosSiiceaMissions AS 
+HeliosSiiceaMissions;"CREATE VIEW HeliosSiiceaMissions AS 
 SELECT 
 *
 , CASE 
@@ -401,8 +401,8 @@ AND (
 			, 4) 
 		AS INTEGER) 
 	) <= 20241231"
-HeliosSiiceaDecisions,CREATE VIEW HeliosSiiceaDecisions AS SELECT * FROM sa_siicea_decisions_20250120
-HeliosSirec,"CREATE VIEW HeliosSirec AS 
+HeliosSiiceaDecisions;CREATE VIEW HeliosSiiceaDecisions AS SELECT * FROM sa_siicea_decisions_20250120
+HeliosSirec;"CREATE VIEW HeliosSirec AS 
 SELECT 
 ""Numéro de la réclamation""
 , ""Ancien numéro de la réclamation""
@@ -479,7 +479,7 @@ END AS ""Motifs IGAS""
 FROM sa_sirec_20250114
 WHERE ""Date de réception à l’ARS"" >= '2022-01-01' 
 AND ""Date de réception à l’ARS"" <= '2024-12-31'"
-HeliosSivss,"CREATE VIEW HeliosSivss AS 
+HeliosSivss;"CREATE VIEW HeliosSivss AS 
 SELECT 
 STRUCTURE_INTITULE
 , NUMERO_SIVSS
@@ -521,7 +521,7 @@ STRUCTURE_INTITULE
 , MOTIF_CLOTURE
 FROM sa_sivss_20250107
 WHERE (SUBSTR(DATE_CLOTURE, 7, 4) || SUBSTR(DATE_CLOTURE, 4, 2)) <= '202412'"
-MatriceSiiceaMissionsReal,"CREATE VIEW MatriceSiiceaMissionsReal AS
+MatriceSiiceaMissionsReal;"CREATE VIEW MatriceSiiceaMissionsReal AS
 SELECT 
 *
 FROM sa_siicea_missions_real_20250120
@@ -556,7 +556,7 @@ AND ""Type de mission"" NOT IN (
 , 'Visites de conformité'
 , 'Enquête administrative'
 )"
-MatriceSiiceaMissionsProg,"CREATE VIEW MatriceSiiceaMissionsProg AS
+MatriceSiiceaMissionsProg;"CREATE VIEW MatriceSiiceaMissionsProg AS
 SELECT 
 *
 FROM sa_siicea_missions_prog_20250120
@@ -591,7 +591,7 @@ AND ""Type de mission"" NOT IN (
 , 'Visites de conformité'
 , 'Enquête administrative'
 )"
-TdBICFiness_500,"CREATE VIEW TdBICFiness_500 AS
+TdBICFiness_500;"CREATE VIEW TdBICFiness_500 AS
 
 --SELECT
 --""Column1""
@@ -693,7 +693,7 @@ finess
 FROM sa_t_finess_20250203
 WHERE categ_code = 500 
 AND etat = ""ACTUEL"""
-RefRegions,"CREATE VIEW RefRegions AS
+RefRegions;"CREATE VIEW RefRegions AS
 SELECT
 	vr.REG AS ""REG""
 	, vr.NCC AS ""NCC""
@@ -705,7 +705,7 @@ SELECT
 	, vc.NCC AS ""NCC""
 	, vc.LIBELLE AS ""LIBELLE""
 FROM ""v_comer_20250207"" vc"
-RefDepartements,"CREATE VIEW RefDepartements AS
+RefDepartements;"CREATE VIEW RefDepartements AS
 SELECT
 	vd.DEP AS ""DEP""
 	, vd.REG AS ""REG""
@@ -720,7 +720,7 @@ SELECT
 	, vc.NCC AS ""NCC""
 	, vc.LIBELLE AS ""LIBELLE""
 FROM v_comer_20250207 vc"
-RefCommunes,"CREATE VIEW RefCommunes AS
+RefCommunes;"CREATE VIEW RefCommunes AS
 WITH 
 ALL_COM AS (
 	SELECT 
@@ -771,7 +771,7 @@ FROM
 	ALL_COM
 GROUP BY
 	1"
-RefGeo,"CREATE VIEW RefGeo AS 
+RefGeo;"CREATE VIEW RefGeo AS 
 SELECT
 RefCommunes.COM AS COM_CD
 , RefCommunes.LIBELLE AS COM_LB
@@ -782,7 +782,7 @@ RefCommunes.COM AS COM_CD
 FROM RefCommunes
 LEFT JOIN RefDepartements ON RefCommunes.DEP = RefDepartements.DEP 
 LEFT JOIN RefRegions ON RefDepartements.REG = RefRegions.REG"
-TdBICSiiceaMissionsprog,"CREATE VIEW TdBICSiiceaMissionsprog AS 
+TdBICSiiceaMissionsprog;"CREATE VIEW TdBICSiiceaMissionsprog AS 
 
 SELECT 
 ""Identifiant de la mission""
@@ -965,7 +965,7 @@ AND ""Type de mission"" NOT IN (
 , 'Visites de conformité'
 , 'Enquête administrative'
 )"
-TdBICSiiceaMissionsReal,"CREATE VIEW TdBICSiiceaMissionsReal AS -- MatriceSiiceaMissionsReal source
+TdBICSiiceaMissionsReal;"CREATE VIEW TdBICSiiceaMissionsReal AS -- MatriceSiiceaMissionsReal source
 
 SELECT 
 ""Identifiant de la mission""
@@ -1147,7 +1147,48 @@ AND ""Type de mission"" NOT IN (
 , 'Visites de conformité'
 , 'Enquête administrative'
 )"
-TdBICSiiceaCibles,"CREATE VIEW TdBICSiiceaCibles AS SELECT 
+TdBICSiiceaCibles;"CREATE VIEW TdBICSiiceaCibles AS SELECT 
 *
 FROM sa_siicea_cibles_20250210
 WHERE FINESS != """""
+MaltraitanceSIVSS;"CREATE VIEW MaltraitanceSIVSS AS
+SELECT 
+STRUCTURE_INTITULE
+, NUMERO_SIVSS
+, SUBSTR(DATE_RECEPTION, 7, 4) || ""-"" || SUBSTR(DATE_RECEPTION, 4, 2) || ""-"" || SUBSTR(DATE_RECEPTION, 1, 2) AS DATE_RECEPTION
+, FAMILLE_PRINCIPALE
+, NATURE_PRINCIPALE
+, AUTRE_SIGNAL_LIBELLE
+, FAMILLE_SECONDAIRE
+, NATURE_SECONDAIRE
+, AUTRE_SIGNAL_SECONDAIRE_LIBELLE
+, EST_EIGS
+, CONSEQUENCES_PERSONNE_EXPOSEE
+, RECLAMATION
+, DECLARANT_EST_ANONYME
+, DECLARANT_QUALITE_FONCTION
+, DECLARANT_CATEGORIE
+, DECLARANT_ORGANISME_TYPE
+, DECLARANT_ETABLISSEMENT_TYPE
+, DECLARANT_ORGANISME_NUMERO_FINESS
+, DECLARANT_ORGANISME_NOM
+, DECLARANT_ORGANISME_REGION
+, DECLARANT_ORGANISME_DEPARTEMENT
+, DECLARANT_ORGANISME_CODE_POSTAL
+, DECLARANT_ORGANISME_COMMUNE
+, DECLARANT_ORGANISME_CODE_INSEE
+, SURVENUE_CAS_COLLECTIVITE
+, SCC_ORGANISME_TYPE
+, SCC_ETABLISSEMENT_TYPE
+, SCC_ORGANISME_NOM
+, SCC_ORGANISME_FINESS
+, SCC_ORGANISME_REGION
+, SCC_ORGANISME_DEPARTEMENT
+, SCC_ORGANISME_CODE_POSTAL
+, SCC_ORGANISME_COMMUNE
+, SCC_ORGANISME_CODE_INSEE
+, ETAT
+, SUPPORT_SIGNALEMENT
+, (SUBSTR(DATE_CLOTURE, 7, 4)) || ""-"" || (SUBSTR(DATE_CLOTURE, 4, 2))  || ""-"" || (SUBSTR(DATE_CLOTURE, 1, 2)) AS DATE_CLOTURE
+, MOTIF_CLOTURE
+FROM sa_sivss_20250107"
