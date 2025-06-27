@@ -1,4 +1,16 @@
 type,name,tbl_name,rootpage,sql
+table,CertDCInsern_2023_2024,CertDCInsern_2023_2024,"","CREATE TABLE "CertDCInsern_2023_2024" (
+	"index" INTEGER,
+	Annee INTEGER,
+	Mois INTEGER,
+	Jour INTEGER,
+	departement_code TEXT,
+	commune_code TEXT,
+	et_finess VARCHAR,
+	Lieu_de_deces VARCHAR,
+	"Source" VARCHAR,
+	deces_nb INTEGER
+)"
 table,CertDCInsern,CertDCInsern,74481,"CREATE TABLE CertDCInsern (
 	""index"" INTEGER,
 	Annee INTEGER,
